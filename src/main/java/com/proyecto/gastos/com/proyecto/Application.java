@@ -22,11 +22,7 @@ public class Application {
 
 	@Bean
 	CommandLineRunner inicializarDatos(GestorArchivos gestorArchivos) {
-		return args -> {
-			gestorArchivos.crearDatosDeEjemploSiNoExisten();
-			System.out.println("Movimientos cargados: " + gestorArchivos.cargarMovimientos().size());
-			System.out.println("Presupuestos cargados: " + gestorArchivos.cargarPresupuestos().size());
-		};
+		return args -> gestorArchivos.crearDatosDeEjemploSiNoExisten();
 	}
 
 }

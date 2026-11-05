@@ -1,6 +1,6 @@
 package com.proyecto.gastos.com.proyecto;
 
-import com.vaadin.flow.component.html.Div;
+import com.proyecto.gastos.com.proyecto.vistas.Tarjeta;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.html.Span;
@@ -40,16 +40,8 @@ public class PresupuestosView extends VerticalLayout {
                 .set("color", "#6b7280")
                 .set("margin", "4px 0 0");
 
-        Div card = new Div(emptyStateTitle, emptyStateMessage);
-        card.setWidthFull();
-        card.getStyle()
-                .set("background-color", "#ffffff")
-                .set("border-radius", "12px")
-                .set("box-shadow", "0 1px 3px rgba(0, 0, 0, 0.15)")
-                .set("padding", "24px")
-                .set("box-sizing", "border-box");
-
-        VerticalLayout content = new VerticalLayout(heading, description, card);
+        VerticalLayout content = new VerticalLayout(
+                heading, description, new Tarjeta(emptyStateTitle, emptyStateMessage));
         content.setWidthFull();
         content.setMaxWidth("1100px");
         content.setPadding(false);
