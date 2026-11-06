@@ -1,9 +1,14 @@
 package com.proyecto.gastos.com.proyecto.modelo;
 
 import java.time.YearMonth;
+import java.util.List;
 import java.util.Locale;
 
 public class Presupuesto {
+
+    public static final String NORMAL = "NORMAL";
+    public static final String ALERTA = "ALERTA";
+    public static final String SUPERADO = "SUPERADO";
 
     private YearMonth mes;
     private String categoria;
@@ -49,6 +54,35 @@ public class Presupuesto {
         if (!Double.isFinite(valorAsignado) || valorAsignado <= 0) {
             throw new IllegalArgumentException("El presupuesto debe ser un número mayor que cero");
         }
+    }
+
+    public double calcularGastado(List<Movimiento> movimientos) {
+        double total = 0;
+        for (Movimiento movimiento : movimientos) {
+            if (Movimiento.GASTO.equals(movimiento.getTipo())
+                    && movimiento.getCategoria().equals(categoria)
+                    && YearMonth.from(movimiento.getFecha()).equals(mes)) {
+                total += movimiento.getValor();
+            }
+        }
+        return total;
+    }
+
+    public double calcularPorcentaje(double gastado) {
+        if (valorAsignado <= 0) {
+            return 0;
+        }
+        return gastado / valorAsignado * 100;
+    }
+
+    public static String obtenerEstado(double porcentaje) {
+        if (porcentaje > 100) {
+            return SUPERADO;
+        }
+        if (porcentaje > 80) {
+            return ALERTA;
+        }
+        return NORMAL;
     }
 
     public String aLinea() {

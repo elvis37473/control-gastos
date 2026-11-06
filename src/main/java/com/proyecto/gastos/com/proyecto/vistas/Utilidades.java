@@ -1,6 +1,7 @@
 package com.proyecto.gastos.com.proyecto.vistas;
 
 import com.proyecto.gastos.com.proyecto.modelo.Movimiento;
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
@@ -27,6 +28,12 @@ public final class Utilidades {
         notificacion.addThemeName("success");
     }
 
+    public static void mostrarAdvertencia(String mensaje) {
+        Notification notificacion =
+                Notification.show(mensaje, 6000, Notification.Position.TOP_CENTER);
+        notificacion.addThemeName("warning");
+    }
+
     public static void mostrarError(String mensaje) {
         Notification notificacion =
                 Notification.show(mensaje, 5000, Notification.Position.TOP_CENTER);
@@ -37,6 +44,10 @@ public final class Utilidades {
         NumberFormat formato = NumberFormat.getNumberInstance(COLOMBIA);
         formato.setMaximumFractionDigits(2);
         return "$ " + formato.format(valor);
+    }
+
+    public static String formatoPorcentaje(double porcentaje) {
+        return String.format(COLOMBIA, "%.1f %%", porcentaje);
     }
 
     public static String nombreMes(YearMonth mes) {
@@ -66,7 +77,12 @@ public final class Utilidades {
     public static Button crearBotonIcono(Icon icono, String etiqueta) {
         Button boton = new Button(icono);
         boton.setAriaLabel(etiqueta);
+        boton.getElement().setProperty("title", etiqueta);
         boton.getStyle().set("background-color", "transparent");
         return boton;
+    }
+
+    public static void aplicarTooltip(Component componente, String texto) {
+        componente.getElement().setProperty("title", texto);
     }
 }

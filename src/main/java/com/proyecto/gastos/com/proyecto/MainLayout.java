@@ -10,12 +10,14 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.sidenav.SideNav;
 import com.vaadin.flow.component.sidenav.SideNavItem;
+import com.vaadin.flow.dom.Element;
 
 public class MainLayout extends AppLayout {
 
     public MainLayout() {
         createHeader();
         createNavigation();
+        agregarEstilos();
     }
 
     private void createHeader() {
@@ -55,5 +57,20 @@ public class MainLayout extends AppLayout {
                 VaadinIcon.CHART.create()));
 
         addToDrawer(label, navigation);
+    }
+
+    private void agregarEstilos() {
+        Element style = new Element("style");
+        style.setText("""
+                .budget-progress-bar { width: 100%; }
+                .budget-progress-bar::part(bar) { border-radius: 999px; }
+                .budget-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+                    gap: 16px;
+                    width: 100%;
+                }
+                """);
+        getElement().appendChild(style);
     }
 }

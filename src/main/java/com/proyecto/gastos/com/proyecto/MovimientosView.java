@@ -2,6 +2,7 @@ package com.proyecto.gastos.com.proyecto;
 
 import com.proyecto.gastos.com.proyecto.archivos.GestorArchivos;
 import com.proyecto.gastos.com.proyecto.modelo.Movimiento;
+import com.proyecto.gastos.com.proyecto.modelo.Presupuesto;
 import com.proyecto.gastos.com.proyecto.vistas.Tarjeta;
 import com.proyecto.gastos.com.proyecto.vistas.Utilidades;
 import com.vaadin.flow.component.button.Button;
@@ -41,6 +42,7 @@ public class MovimientosView extends VerticalLayout {
 
     private final GestorArchivos gestor;
     private List<Movimiento> movimientos = new ArrayList<>();
+    private List<Presupuesto> presupuestos = new ArrayList<>();
 
     private final Grid<Movimiento> tabla = new Grid<>();
     private final TextField campoBusqueda = new TextField("Buscar");
@@ -66,6 +68,7 @@ public class MovimientosView extends VerticalLayout {
 
         try {
             movimientos = gestor.cargarMovimientos();
+            presupuestos = gestor.cargarPresupuestos();
         } catch (IOException e) {
             Utilidades.mostrarError("No se pudieron cargar los movimientos: " + e.getMessage());
         }
@@ -431,10 +434,38 @@ public class MovimientosView extends VerticalLayout {
             aplicarFiltros();
             Utilidades.mostrarExito(
                     esNuevo ? "Movimiento registrado" : "Movimiento actualizado");
+            comprobarAlertaPresupuesto(movimientoNuevo);
         } catch (IOException | IllegalArgumentException e) {
             movimientos = originales;
             aplicarFiltros();
             Utilidades.mostrarError("No se pudo guardar el movimiento: " + e.getMessage());
+        }
+    }
+
+    private void comprobarAlertaPresupuesto(Movimiento movimiento) {
+        if (!Movimiento.GASTO.equals(movimiento.getTipo())) {
+            return;
+        }
+        YearMonth mes = YearMonth.from(movimiento.getFecha());
+        Presupuesto presupuesto = presupuestos.stream()
+                .filter(p -> p.getMes().equals(mes))
+                .filter(p -> p.getCategoria().equals(movimiento.getCategoria()))
+                .findFirst()
+                .orElse(null);
+        if (presupuesto == null) {
+            return;
+        }
+        double gastado = presupuesto.calcularGastado(movimientos);
+        double porcentaje = presupuesto.calcularPorcentaje(gastado);
+        String estado = Presupuesto.obtenerEstado(porcentaje);
+        if (Presupuesto.ALERTA.equals(estado)) {
+            Utilidades.mostrarAdvertencia("¡Alerta! Este gasto lleva a "
+                    + Utilidades.formatoPorcentaje(porcentaje)
+                    + " del presupuesto de " + presupuesto.getCategoria() + ".");
+        } else if (Presupuesto.SUPERADO.equals(estado)) {
+            Utilidades.mostrarError("¡Presupuesto superado! Ya llevas "
+                    + Utilidades.formatoPorcentaje(porcentaje)
+                    + " del límite de " + presupuesto.getCategoria() + ".");
         }
     }
 
