@@ -42,12 +42,35 @@ class GestorArchivosTest {
                 movimientos.stream().map(Movimiento::getFecha).min(LocalDate::compareTo).orElseThrow()));
         assertFalse(movimientos.stream()
                 .anyMatch(movimiento -> movimiento.getFecha().isAfter(LocalDate.of(2026, 11, 5))));
+        assertEquals(353000, movimientos.stream()
+                .filter(movimiento -> Movimiento.GASTO.equals(movimiento.getTipo()))
+                .filter(movimiento -> YearMonth.from(movimiento.getFecha())
+                        .equals(YearMonth.of(2026, 11)))
+                .mapToDouble(Movimiento::getValor)
+                .sum());
 
         movimientos.get(0).setDescripcion("Descripción conservada");
         gestor.guardarMovimientos(movimientos);
         gestor.crearDatosDeEjemploSiNoExisten();
 
         assertEquals("Descripción conservada", gestor.cargarMovimientos().get(0).getDescripcion());
+    }
+
+    @Test
+    void generaMovimientosDeImportePositivoCuandoElMesApenasEmpieza() throws IOException {
+        Clock primerDiaDelMes = Clock.fixed(
+                Instant.parse("2026-11-01T12:00:00Z"), ZoneOffset.UTC);
+        GestorArchivos gestor = new GestorArchivos(carpetaTemporal, primerDiaDelMes);
+
+        gestor.crearDatosDeEjemploSiNoExisten();
+
+        List<Movimiento> delMes = gestor.cargarMovimientos().stream()
+                .filter(movimiento -> YearMonth.from(movimiento.getFecha())
+                        .equals(YearMonth.of(2026, 11)))
+                .toList();
+        assertTrue(delMes.stream().allMatch(movimiento -> movimiento.getValor() > 0));
+        assertFalse(delMes.stream()
+                .anyMatch(movimiento -> movimiento.getFecha().isAfter(LocalDate.of(2026, 11, 1))));
     }
 
     @Test

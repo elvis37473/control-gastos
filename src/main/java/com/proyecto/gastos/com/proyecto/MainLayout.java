@@ -55,6 +55,8 @@ public class MainLayout extends AppLayout {
                 VaadinIcon.WALLET.create()));
         navigation.addItem(new SideNavItem("Reportes", ReportesView.class,
                 VaadinIcon.CHART.create()));
+        navigation.addItem(new SideNavItem("Análisis", AnalisisView.class,
+                VaadinIcon.BAR_CHART.create()));
 
         addToDrawer(label, navigation);
     }

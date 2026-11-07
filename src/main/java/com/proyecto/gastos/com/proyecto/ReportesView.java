@@ -168,11 +168,11 @@ public class ReportesView extends VerticalLayout {
 
     private Div crearTarjetasResumen() {
         Div tarjetas = new Div(
-                crearTarjetaResumen("Total ingresos", valorIngresos, "#16a34a",
+                Utilidades.crearIndicador("Total ingresos", valorIngresos, "#16a34a",
                         "Todo el dinero que entró en el mes"),
-                crearTarjetaResumen("Total gastos", valorGastos, "#dc2626",
+                Utilidades.crearIndicador("Total gastos", valorGastos, "#dc2626",
                         "Todo el dinero que salió en el mes"),
-                crearTarjetaResumen("Saldo disponible", valorSaldo, "#2563eb",
+                Utilidades.crearIndicador("Saldo disponible", valorSaldo, "#2563eb",
                         "Ingresos menos gastos del mes"));
         tarjetas.setWidthFull();
         tarjetas.getStyle()
@@ -181,30 +181,6 @@ public class ReportesView extends VerticalLayout {
                 .set("gap", "16px")
                 .set("margin-top", "16px");
         return tarjetas;
-    }
-
-    private Div crearTarjetaResumen(String titulo, Span valor, String color, String ayuda) {
-        Span etiqueta = new Span(titulo);
-        etiqueta.getStyle()
-                .set("display", "block")
-                .set("color", "#6b7280")
-                .set("font-size", "0.9rem");
-
-        valor.getStyle()
-                .set("display", "block")
-                .set("font-size", "1.6rem")
-                .set("font-weight", "700");
-
-        Div tarjeta = new Div(etiqueta, valor);
-        tarjeta.getStyle()
-                .set("flex", "1 1 200px")
-                .set("padding", "16px")
-                .set("border", "1px solid #e5e7eb")
-                .set("border-left", "5px solid " + color)
-                .set("border-radius", "10px")
-                .set("box-sizing", "border-box");
-        Tooltip.forComponent(tarjeta).withText(ayuda);
-        return tarjeta;
     }
 
     private void configurarFiltros() {

@@ -391,16 +391,7 @@ public class PresupuestosView extends VerticalLayout {
     }
 
     private Div crearAviso(VaadinIcon icono, String texto, String fondo, String color, String estado) {
-        Div aviso = new Div(icono.create(), new Span(texto));
-        aviso.getStyle()
-                .set("display", "flex")
-                .set("align-items", "center")
-                .set("gap", "10px")
-                .set("padding", "10px 16px")
-                .set("border-radius", "8px")
-                .set("background-color", fondo)
-                .set("color", color)
-                .set("font-weight", "600");
+        Div aviso = Utilidades.crearAviso(icono, texto, fondo, color);
         if (estado != null) {
             aviso.getStyle().set("cursor", "pointer");
             aviso.getElement().setAttribute("title", "Haz clic para filtrar estas categorías");
@@ -414,7 +405,7 @@ public class PresupuestosView extends VerticalLayout {
 
     private Div crearTarjetaPresupuesto(Presupuesto presupuesto, double gastado, double porcentaje,
             String estado) {
-        String colorEstado = colorDelEstado(estado);
+        String colorEstado = Utilidades.colorDelEstado(estado);
         Div tarjeta = new Div();
         tarjeta.addClassName("budget-category-card");
         tarjeta.getStyle()
@@ -476,16 +467,6 @@ public class PresupuestosView extends VerticalLayout {
 
         tarjeta.add(cabecera, detalle, barra, etiqueta);
         return tarjeta;
-    }
-
-    private String colorDelEstado(String estado) {
-        if (Presupuesto.SUPERADO.equals(estado)) {
-            return "#dc2626";
-        }
-        if (Presupuesto.ALERTA.equals(estado)) {
-            return "#f59e0b";
-        }
-        return "#16a34a";
     }
 
     private HorizontalLayout crearBotonesAcciones(Presupuesto presupuesto) {

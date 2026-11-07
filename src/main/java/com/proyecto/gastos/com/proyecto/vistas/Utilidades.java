@@ -1,10 +1,15 @@
 package com.proyecto.gastos.com.proyecto.vistas;
 
 import com.proyecto.gastos.com.proyecto.modelo.Movimiento;
+import com.proyecto.gastos.com.proyecto.modelo.Presupuesto;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.shared.Tooltip;
 import java.text.NumberFormat;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -84,5 +89,53 @@ public final class Utilidades {
 
     public static void aplicarTooltip(Component componente, String texto) {
         componente.getElement().setProperty("title", texto);
+    }
+
+    public static Div crearIndicador(String titulo, Span valor, String color, String ayuda) {
+        Span etiqueta = new Span(titulo);
+        etiqueta.getStyle()
+                .set("display", "block")
+                .set("color", "#6b7280")
+                .set("font-size", "0.9rem");
+        valor.getStyle()
+                .set("display", "block")
+                .set("font-size", "1.6rem")
+                .set("font-weight", "700");
+
+        Div tarjeta = new Div(etiqueta, valor);
+        tarjeta.getStyle()
+                .set("flex", "1 1 200px")
+                .set("padding", "16px")
+                .set("border", "1px solid #e5e7eb")
+                .set("border-left", "5px solid " + color)
+                .set("border-radius", "10px")
+                .set("box-sizing", "border-box");
+        Tooltip.forComponent(tarjeta).withText(ayuda);
+        return tarjeta;
+    }
+
+    public static Div crearAviso(
+            VaadinIcon tipoIcono, String texto, String colorFondo, String colorTexto) {
+        Div aviso = new Div(tipoIcono.create(), new Span(texto));
+        aviso.getStyle()
+                .set("display", "flex")
+                .set("align-items", "center")
+                .set("gap", "10px")
+                .set("padding", "10px 16px")
+                .set("border-radius", "8px")
+                .set("background-color", colorFondo)
+                .set("color", colorTexto)
+                .set("font-weight", "600");
+        return aviso;
+    }
+
+    public static String colorDelEstado(String estado) {
+        if (Presupuesto.SUPERADO.equals(estado)) {
+            return "#dc2626";
+        }
+        if (Presupuesto.ALERTA.equals(estado)) {
+            return "#f59e0b";
+        }
+        return "#16a34a";
     }
 }

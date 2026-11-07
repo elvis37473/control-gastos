@@ -148,7 +148,7 @@ public class GestorArchivos {
         LocalDate hoy = LocalDate.now(reloj);
         YearMonth mesActual = YearMonth.from(hoy);
         List<String> categorias = Movimiento.CATEGORIAS_GASTO;
-        double[] gastosMesActual = {735000, 170000, 810000, 150000, 100000, 30000, 120000};
+        double[] gastosMesCompleto = {735000, 170000, 810000, 150000, 100000, 30000, 120000};
         String[][] descripciones = {
                 {"Mercado del mes", "Domicilios y restaurantes"},
                 {"Tarjeta de transporte", "Taxi"},
@@ -163,8 +163,14 @@ public class GestorArchivos {
         int id = 1;
         for (int i = 0; i < 6; i++) {
             YearMonth mes = mesActual.minusMonths(5 - i);
-            int ultimoDia = mes.equals(mesActual) ? hoy.getDayOfMonth() : mes.lengthOfMonth();
-            double factor = factorPorMes[i];
+            boolean esMesActual = mes.equals(mesActual);
+            int ultimoDia = mes.lengthOfMonth();
+            double avance = 1.0;
+            if (esMesActual) {
+                ultimoDia = hoy.getDayOfMonth();
+                avance = (double) ultimoDia / mes.lengthOfMonth();
+            }
+            double factor = factorPorMes[i] * avance;
 
             lista.add(new Movimiento(id++, Movimiento.INGRESO, 3000000,
                     mes.atDay(1), "Salario", "Pago mensual"));
@@ -175,16 +181,22 @@ public class GestorArchivos {
             }
 
             for (int c = 0; c < categorias.size(); c++) {
-                double total = Math.round(gastosMesActual[c] * factor / 1000) * 1000;
-                double primero = Math.round(total * 0.6 / 1000) * 1000;
-                double segundo = total - primero;
-                int dia1 = Math.min(3 + c * 2, ultimoDia);
-                int dia2 = Math.min(16 + c * 2, ultimoDia);
+                double total = Math.round(gastosMesCompleto[c] * factor / 1000) * 1000;
+                if (total > 0) {
+                    double primero = Math.round(total * 0.6 / 1000) * 1000;
+                    double segundo = total - primero;
+                    int dia1 = Math.min(3 + c * 2, ultimoDia);
+                    int dia2 = Math.min(16 + c * 2, ultimoDia);
 
-                lista.add(new Movimiento(id++, Movimiento.GASTO, primero,
-                        mes.atDay(dia1), categorias.get(c), descripciones[c][0]));
-                lista.add(new Movimiento(id++, Movimiento.GASTO, segundo,
-                        mes.atDay(dia2), categorias.get(c), descripciones[c][1]));
+                    if (primero > 0) {
+                        lista.add(new Movimiento(id++, Movimiento.GASTO, primero,
+                                mes.atDay(dia1), categorias.get(c), descripciones[c][0]));
+                    }
+                    if (segundo > 0) {
+                        lista.add(new Movimiento(id++, Movimiento.GASTO, segundo,
+                                mes.atDay(dia2), categorias.get(c), descripciones[c][1]));
+                    }
+                }
             }
         }
         return lista;
