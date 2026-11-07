@@ -28,6 +28,7 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.VaadinSession;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -86,6 +87,14 @@ public class MovimientosView extends VerticalLayout {
         contenido.setPadding(false);
         contenido.setSpacing(true);
         add(contenido);
+        addAttachListener(evento -> {
+            VaadinSession session = evento.getUI().getSession();
+            if (Boolean.TRUE.equals(
+                    session.getAttribute(ReportesView.ABRIR_FORMULARIO_NUEVO))) {
+                session.setAttribute(ReportesView.ABRIR_FORMULARIO_NUEVO, null);
+                abrirFormulario(null);
+            }
+        });
     }
 
     private HorizontalLayout crearEncabezado() {

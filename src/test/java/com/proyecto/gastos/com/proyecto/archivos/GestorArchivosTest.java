@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.proyecto.gastos.com.proyecto.modelo.Movimiento;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Clock;
@@ -70,5 +71,25 @@ class GestorArchivosTest {
         assertThrows(IllegalArgumentException.class,
                 () -> gestor.guardarPresupuestos(List.of(presupuesto, presupuesto)));
         assertEquals(contenidoOriginal, Files.readString(archivo));
+    }
+
+    @Test
+    void guardaReportesComoUtf8EnLaCarpetaDeExportaciones() throws IOException {
+        Path exportaciones = carpetaTemporal.resolve("exportaciones");
+        GestorArchivos gestor = new GestorArchivos(carpetaTemporal, RELOJ_FIJO, exportaciones);
+        String contenido = "Categoría: Alimentación\nDescripción: Café y pan";
+
+        assertTrue(gestor.guardarReporte("reporte-2026-11.txt", contenido));
+        assertEquals(contenido, Files.readString(
+                exportaciones.resolve("reporte-2026-11.txt"), StandardCharsets.UTF_8));
+    }
+
+    @Test
+    void rechazaRutasFueraDeLaCarpetaDeExportaciones() {
+        GestorArchivos gestor = new GestorArchivos(
+                carpetaTemporal, RELOJ_FIJO, carpetaTemporal.resolve("exportaciones"));
+
+        assertThrows(IllegalArgumentException.class,
+                () -> gestor.guardarReporte("..\\fuera.txt", "contenido"));
     }
 }

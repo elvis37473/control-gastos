@@ -20,16 +20,22 @@ public class GestorArchivos {
     private final Clock reloj;
     private final Path archivoMovimientos;
     private final Path archivoPresupuestos;
+    private final Path carpetaExportaciones;
 
     public GestorArchivos(Path carpeta) {
-        this(carpeta, Clock.systemDefaultZone());
+        this(carpeta, Clock.systemDefaultZone(), Path.of("exportaciones"));
     }
 
     public GestorArchivos(Path carpeta, Clock reloj) {
+        this(carpeta, reloj, Path.of("exportaciones"));
+    }
+
+    public GestorArchivos(Path carpeta, Clock reloj, Path carpetaExportaciones) {
         this.carpeta = carpeta;
         this.reloj = reloj;
         this.archivoMovimientos = carpeta.resolve("movimientos.txt");
         this.archivoPresupuestos = carpeta.resolve("presupuestos.txt");
+        this.carpetaExportaciones = carpetaExportaciones;
     }
 
     public List<Movimiento> cargarMovimientos() throws IOException {
@@ -109,6 +115,26 @@ public class GestorArchivos {
         }
         if (!Files.exists(archivoPresupuestos)) {
             guardarPresupuestos(generarPresupuestosDeEjemplo());
+        }
+    }
+
+    public boolean guardarReporte(String nombreArchivo, String contenido) {
+        if (nombreArchivo == null || nombreArchivo.isBlank() || contenido == null) {
+            throw new IllegalArgumentException("El nombre y el contenido del reporte son obligatorios");
+        }
+        Path nombre = Path.of(nombreArchivo);
+        if (nombre.isAbsolute() || nombre.getNameCount() != 1
+                || nombre.toString().equals(".") || nombre.toString().equals("..")) {
+            throw new IllegalArgumentException("El nombre del reporte no es válido");
+        }
+        try {
+            Files.createDirectories(carpetaExportaciones);
+            Files.writeString(carpetaExportaciones.resolve(nombre), contenido,
+                    StandardCharsets.UTF_8);
+            return true;
+        } catch (IOException e) {
+            System.err.println("No se pudo guardar el reporte: " + e.getMessage());
+            return false;
         }
     }
 
