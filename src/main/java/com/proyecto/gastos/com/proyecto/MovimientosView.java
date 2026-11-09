@@ -52,6 +52,15 @@ public class MovimientosView extends VerticalLayout {
     private final ComboBox<String> filtroCategoria = new ComboBox<>("Categoría");
     private final Span resumen = new Span();
 
+    private final Span valorIngresos = new Span();
+    private final Span valorGastos = new Span();
+    private final Span valorSaldo = new Span();
+    private final Span valorCantidad = new Span();
+
+    private final Div estadoVacio = new Div();
+    private final Span tituloVacio = new Span();
+    private final Span detalleVacio = new Span();
+
     private final Dialog formulario = new Dialog();
     private final Select<String> campoTipo = new Select<>();
     private final NumberField campoValor = new NumberField("Valor");
@@ -65,7 +74,7 @@ public class MovimientosView extends VerticalLayout {
         this.gestor = gestor;
         setSizeFull();
         setPadding(true);
-        getStyle().set("background-color", "#f4f5f7");
+        getStyle().set("background-color", Utilidades.FONDO);
 
         try {
             movimientos = gestor.cargarMovimientos();
@@ -77,16 +86,13 @@ public class MovimientosView extends VerticalLayout {
         configurarTabla();
         configurarFormulario();
         configurarFiltros();
+        configurarEstadoVacio();
         actualizarMeses();
         aplicarFiltros();
 
-        VerticalLayout contenido = new VerticalLayout(crearEncabezado(),
-                new Tarjeta(crearBarraFiltros(), resumen, tabla));
-        contenido.setWidthFull();
-        contenido.setMaxWidth("1200px");
-        contenido.setPadding(false);
-        contenido.setSpacing(true);
-        add(contenido);
+        Tarjeta tarjetaTabla = new Tarjeta(crearBarraFiltros(), resumen, tabla, estadoVacio);
+        add(Utilidades.crearPagina(crearEncabezado(), crearTarjetasResumen(), tarjetaTabla));
+
         addAttachListener(evento -> {
             VaadinSession session = evento.getUI().getSession();
             if (Boolean.TRUE.equals(
@@ -99,15 +105,18 @@ public class MovimientosView extends VerticalLayout {
 
     private HorizontalLayout crearEncabezado() {
         H2 titulo = new H2("Movimientos");
-        titulo.getStyle().set("margin", "0");
+        titulo.getStyle()
+                .set("margin", "0")
+                .set("color", Utilidades.TEXTO);
 
         Paragraph subtitulo = new Paragraph("Registra y consulta tus ingresos y gastos.");
         subtitulo.getStyle()
-                .set("margin", "0")
-                .set("color", "#6b7280");
+                .set("margin", "4px 0 0")
+                .set("color", Utilidades.TEXTO_SUAVE);
 
         Button botonNuevo = new Button("Nuevo movimiento", VaadinIcon.PLUS.create());
         Utilidades.estiloPrincipal(botonNuevo);
+        Utilidades.aplicarTooltip(botonNuevo, "Registra un ingreso o un gasto");
         botonNuevo.addClickListener(evento -> abrirFormulario(null));
 
         HorizontalLayout encabezado =
@@ -119,10 +128,36 @@ public class MovimientosView extends VerticalLayout {
         return encabezado;
     }
 
+    private Div crearTarjetasResumen() {
+        Div tarjetas = new Div(
+                Utilidades.crearTarjetaEstadistica(VaadinIcon.ARROW_UP, "Total de ingresos",
+                        valorIngresos, "#16a34a",
+                        "Suma de los ingresos que se ven con los filtros actuales"),
+                Utilidades.crearTarjetaEstadistica(VaadinIcon.ARROW_DOWN, "Total de gastos",
+                        valorGastos, "#dc2626",
+                        "Suma de los gastos que se ven con los filtros actuales"),
+                Utilidades.crearTarjetaEstadistica(VaadinIcon.WALLET, "Balance disponible",
+                        valorSaldo, "#2563eb", "Ingresos menos gastos"),
+                Utilidades.crearTarjetaEstadistica(VaadinIcon.LIST, "Movimientos",
+                        valorCantidad, "#7c3aed", "Cantidad de movimientos que se ven en la tabla"));
+        tarjetas.setWidthFull();
+        tarjetas.getStyle()
+                .set("display", "grid")
+                .set("grid-template-columns", "repeat(auto-fit, minmax(210px, 1fr))")
+                .set("gap", "16px");
+        return tarjetas;
+    }
+
     private HorizontalLayout crearBarraFiltros() {
-        HorizontalLayout barra =
-                new HorizontalLayout(campoBusqueda, filtroTipo, filtroMes, filtroCategoria);
+        Button botonLimpiar = new Button("Limpiar filtros", VaadinIcon.CLOSE_SMALL.create());
+        botonLimpiar.getStyle().set("background-color", "transparent");
+        Utilidades.aplicarTooltip(botonLimpiar, "Quita la búsqueda y todos los filtros");
+        botonLimpiar.addClickListener(evento -> limpiarFiltros());
+
+        HorizontalLayout barra = new HorizontalLayout(
+                campoBusqueda, filtroTipo, filtroMes, filtroCategoria, botonLimpiar);
         barra.setWidthFull();
+        barra.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.END);
         barra.getStyle()
                 .set("flex-wrap", "wrap")
                 .set("margin-bottom", "8px");
@@ -134,13 +169,37 @@ public class MovimientosView extends VerticalLayout {
 
         resumen.getStyle()
                 .set("display", "block")
-                .set("margin-bottom", "12px")
-                .set("color", "#6b7280");
+                .set("margin", "4px 0 12px")
+                .set("font-size", "0.9rem")
+                .set("color", Utilidades.TEXTO_SUAVE);
         return barra;
     }
 
+    private void configurarEstadoVacio() {
+        Icon icono = VaadinIcon.SEARCH.create();
+        icono.setSize("32px");
+        icono.getStyle().set("color", Utilidades.TEXTO_SUAVE);
+
+        tituloVacio.getStyle()
+                .set("font-weight", "600")
+                .set("color", Utilidades.TEXTO);
+        detalleVacio.getStyle().set("color", Utilidades.TEXTO_SUAVE);
+
+        Button botonLimpiar = new Button("Limpiar filtros", evento -> limpiarFiltros());
+
+        estadoVacio.add(icono, tituloVacio, detalleVacio, botonLimpiar);
+        estadoVacio.getStyle()
+                .set("display", "flex")
+                .set("flex-direction", "column")
+                .set("align-items", "center")
+                .set("gap", "8px")
+                .set("padding", "40px 16px")
+                .set("text-align", "center");
+        estadoVacio.setVisible(false);
+    }
+
     private void configurarTabla() {
-        tabla.addComponentColumn(this::crearEtiquetaTipo)
+        tabla.addComponentColumn(movimiento -> Utilidades.crearEtiquetaTipo(movimiento.getTipo()))
                 .setHeader("Tipo")
                 .setAutoWidth(true)
                 .setFlexGrow(0);
@@ -163,26 +222,8 @@ public class MovimientosView extends VerticalLayout {
                 .setAutoWidth(true)
                 .setFlexGrow(0);
         tabla.setWidthFull();
-        tabla.setHeight("480px");
-    }
-
-    private Span crearEtiquetaTipo(Movimiento movimiento) {
-        Span etiqueta = new Span(Utilidades.nombreTipo(movimiento.getTipo()));
-        etiqueta.getStyle()
-                .set("padding", "2px 10px")
-                .set("border-radius", "999px")
-                .set("font-size", "0.8rem")
-                .set("font-weight", "600");
-        if (Movimiento.INGRESO.equals(movimiento.getTipo())) {
-            etiqueta.getStyle()
-                    .set("background-color", "#dcfce7")
-                    .set("color", "#166534");
-        } else {
-            etiqueta.getStyle()
-                    .set("background-color", "#fee2e2")
-                    .set("color", "#991b1b");
-        }
-        return etiqueta;
+        tabla.setHeight("55vh");
+        tabla.setMinHeight("320px");
     }
 
     private HorizontalLayout crearBotonesAcciones(Movimiento movimiento) {
@@ -228,6 +269,14 @@ public class MovimientosView extends VerticalLayout {
         filtroCategoria.addValueChangeListener(evento -> aplicarFiltros());
     }
 
+    private void limpiarFiltros() {
+        campoBusqueda.clear();
+        filtroTipo.clear();
+        filtroMes.clear();
+        filtroCategoria.clear();
+        aplicarFiltros();
+    }
+
     private void actualizarMeses() {
         List<YearMonth> meses = movimientos.stream()
                 .map(movimiento -> YearMonth.from(movimiento.getFecha()))
@@ -268,10 +317,29 @@ public class MovimientosView extends VerticalLayout {
                 .thenComparingInt(Movimiento::getId)
                 .reversed());
         tabla.setItems(filtrados);
-        resumen.setText(filtrados.size() + " movimientos  |  Ingresos: "
-                + Utilidades.formatoDinero(totalIngresos)
-                + "  |  Gastos: " + Utilidades.formatoDinero(totalGastos)
-                + "  |  Saldo: " + Utilidades.formatoDinero(totalIngresos - totalGastos));
+
+        double saldo = totalIngresos - totalGastos;
+        valorIngresos.setText(Utilidades.formatoDinero(totalIngresos));
+        valorGastos.setText(Utilidades.formatoDinero(totalGastos));
+        valorSaldo.setText(Utilidades.formatoDinero(saldo));
+        valorSaldo.getStyle().set("color", saldo >= 0 ? "#166534" : "#991b1b");
+        valorCantidad.setText(String.valueOf(filtrados.size()));
+        resumen.setText(filtrados.size() == 1
+                ? "1 movimiento"
+                : filtrados.size() + " movimientos");
+
+        boolean vacio = filtrados.isEmpty();
+        tabla.setVisible(!vacio);
+        estadoVacio.setVisible(vacio);
+        if (vacio) {
+            if (movimientos.isEmpty()) {
+                tituloVacio.setText("Todavía no tienes movimientos");
+                detalleVacio.setText("Pulsa “Nuevo movimiento” para registrar el primero.");
+            } else {
+                tituloVacio.setText("No encontramos movimientos");
+                detalleVacio.setText("Prueba con otra búsqueda o quita algún filtro.");
+            }
+        }
     }
 
     private boolean cumpleFiltros(Movimiento movimiento, String texto) {
@@ -308,7 +376,10 @@ public class MovimientosView extends VerticalLayout {
 
         campoValor.setPrefixComponent(new Span("$"));
         campoValor.setMin(0);
+        campoValor.setPlaceholder("0");
         campoFecha.setLocale(Locale.forLanguageTag("es-CO"));
+        campoCategoria.setPlaceholder("Elige una categoría");
+        campoDescripcion.setPlaceholder("Ej.: Mercado del mes");
         campoDescripcion.setMaxLength(60);
         campoDescripcion.setHelperText("Máximo 60 caracteres");
 
@@ -481,8 +552,8 @@ public class MovimientosView extends VerticalLayout {
     private void confirmarEliminacion(Movimiento movimiento) {
         ConfirmDialog dialogo = new ConfirmDialog();
         dialogo.setHeader("Eliminar movimiento");
-        dialogo.setText("¿Seguro que quieres eliminar \"" + movimiento.getDescripcion()
-                + "\" por " + Utilidades.formatoDinero(movimiento.getValor())
+        dialogo.setText("¿Seguro que quieres eliminar “" + movimiento.getDescripcion()
+                + "” por " + Utilidades.formatoDinero(movimiento.getValor())
                 + "? Esta acción no se puede deshacer.");
         dialogo.setCancelable(true);
         dialogo.setCancelText("Cancelar");

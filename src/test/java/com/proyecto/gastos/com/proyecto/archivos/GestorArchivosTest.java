@@ -74,6 +74,31 @@ class GestorArchivosTest {
     }
 
     @Test
+    void distribuyeLosGastosDelMesActualHastaLaFechaDeGeneracion() throws IOException {
+        Clock ochoDeNoviembre = Clock.fixed(
+                Instant.parse("2026-11-08T12:00:00Z"), ZoneOffset.UTC);
+        GestorArchivos gestor = new GestorArchivos(carpetaTemporal, ochoDeNoviembre);
+
+        gestor.crearDatosDeEjemploSiNoExisten();
+
+        List<Movimiento> gastosDelMes = gestor.cargarMovimientos().stream()
+                .filter(movimiento -> Movimiento.GASTO.equals(movimiento.getTipo()))
+                .filter(movimiento -> YearMonth.from(movimiento.getFecha())
+                        .equals(YearMonth.of(2026, 11)))
+                .toList();
+
+        assertEquals(564000, gastosDelMes.stream()
+                .mapToDouble(Movimiento::getValor)
+                .sum());
+        assertEquals(8, gastosDelMes.stream()
+                .map(Movimiento::getFecha)
+                .distinct()
+                .count());
+        assertFalse(gastosDelMes.stream()
+                .anyMatch(movimiento -> movimiento.getFecha().isAfter(LocalDate.of(2026, 11, 8))));
+    }
+
+    @Test
     void ignoraLineaCorruptaSinPerderLosRegistrosValidos() throws IOException {
         GestorArchivos gestor = new GestorArchivos(carpetaTemporal, RELOJ_FIJO);
         gestor.crearDatosDeEjemploSiNoExisten();

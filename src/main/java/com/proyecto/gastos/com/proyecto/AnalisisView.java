@@ -147,7 +147,7 @@ public class AnalisisView extends VerticalLayout {
 
     private Div crearColumna(YearMonth mes, double gasto, double maximo) {
         boolean enCurso = mes.equals(mesActual);
-        Span monto = new Span(formatoCorto(gasto));
+        Span monto = new Span(enCurso ? formatoCorto(proyeccionTotal) : formatoCorto(gasto));
         monto.getStyle()
                 .set("font-size", "0.8rem")
                 .set("font-weight", "600")
@@ -220,7 +220,8 @@ public class AnalisisView extends VerticalLayout {
 
     private String etiquetaMes(YearMonth mes) {
         String corto = mes.getMonth().getDisplayName(TextStyle.SHORT, COLOMBIA).replace(".", "");
-        corto = corto.substring(0, 1).toUpperCase(COLOMBIA) + corto.substring(1);
+        corto = corto.substring(0, Math.min(3, corto.length()));
+        corto = corto.substring(0, 1).toUpperCase() + corto.substring(1);
         return corto + " " + (mes.getYear() % 100);
     }
 

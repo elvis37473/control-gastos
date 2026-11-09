@@ -1,0 +1,93 @@
+1|INGRESO|3000000.00|2026-06-01|Salario|Pago mensual
+2|INGRESO|350000.00|2026-06-15|Ingreso extra|Trabajo freelance
+3|GASTO|353000.00|2026-06-03|Alimentación|Mercado del mes
+4|GASTO|235000.00|2026-06-16|Alimentación|Domicilios y restaurantes
+5|GASTO|82000.00|2026-06-05|Transporte|Tarjeta de transporte
+6|GASTO|54000.00|2026-06-18|Transporte|Taxi
+7|GASTO|389000.00|2026-06-07|Vivienda|Arriendo
+8|GASTO|259000.00|2026-06-20|Vivienda|Administración
+9|GASTO|72000.00|2026-06-09|Servicios|Energía y agua
+10|GASTO|48000.00|2026-06-22|Servicios|Internet y celular
+11|GASTO|48000.00|2026-06-11|Entretenimiento|Cine con amigos
+12|GASTO|32000.00|2026-06-24|Entretenimiento|Suscripción de streaming
+13|GASTO|14000.00|2026-06-13|Salud|Consulta médica
+14|GASTO|10000.00|2026-06-26|Salud|Medicamentos
+15|GASTO|58000.00|2026-06-15|Educación|Libros y copias
+16|GASTO|38000.00|2026-06-28|Educación|Curso en línea
+17|INGRESO|3000000.00|2026-07-01|Salario|Pago mensual
+18|GASTO|397000.00|2026-07-03|Alimentación|Mercado del mes
+19|GASTO|265000.00|2026-07-16|Alimentación|Domicilios y restaurantes
+20|GASTO|92000.00|2026-07-05|Transporte|Tarjeta de transporte
+21|GASTO|61000.00|2026-07-18|Transporte|Taxi
+22|GASTO|437000.00|2026-07-07|Vivienda|Arriendo
+23|GASTO|292000.00|2026-07-20|Vivienda|Administración
+24|GASTO|81000.00|2026-07-09|Servicios|Energía y agua
+25|GASTO|54000.00|2026-07-22|Servicios|Internet y celular
+26|GASTO|54000.00|2026-07-11|Entretenimiento|Cine con amigos
+27|GASTO|36000.00|2026-07-24|Entretenimiento|Suscripción de streaming
+28|GASTO|16000.00|2026-07-13|Salud|Consulta médica
+29|GASTO|11000.00|2026-07-26|Salud|Medicamentos
+30|GASTO|65000.00|2026-07-15|Educación|Libros y copias
+31|GASTO|43000.00|2026-07-28|Educación|Curso en línea
+32|INGRESO|3000000.00|2026-08-01|Salario|Pago mensual
+33|INGRESO|350000.00|2026-08-15|Ingreso extra|Trabajo freelance
+34|GASTO|308000.00|2026-08-03|Alimentación|Mercado del mes
+35|GASTO|206000.00|2026-08-16|Alimentación|Domicilios y restaurantes
+36|GASTO|71000.00|2026-08-05|Transporte|Tarjeta de transporte
+37|GASTO|48000.00|2026-08-18|Transporte|Taxi
+38|GASTO|340000.00|2026-08-07|Vivienda|Arriendo
+39|GASTO|227000.00|2026-08-20|Vivienda|Administración
+40|GASTO|63000.00|2026-08-09|Servicios|Energía y agua
+41|GASTO|42000.00|2026-08-22|Servicios|Internet y celular
+42|GASTO|42000.00|2026-08-11|Entretenimiento|Cine con amigos
+43|GASTO|28000.00|2026-08-24|Entretenimiento|Suscripción de streaming
+44|GASTO|13000.00|2026-08-13|Salud|Consulta médica
+45|GASTO|8000.00|2026-08-26|Salud|Medicamentos
+46|GASTO|50000.00|2026-08-15|Educación|Libros y copias
+47|GASTO|34000.00|2026-08-28|Educación|Curso en línea
+48|INGRESO|3000000.00|2026-09-01|Salario|Pago mensual
+49|GASTO|441000.00|2026-09-03|Alimentación|Mercado del mes
+50|GASTO|294000.00|2026-09-16|Alimentación|Domicilios y restaurantes
+51|GASTO|102000.00|2026-09-05|Transporte|Tarjeta de transporte
+52|GASTO|68000.00|2026-09-18|Transporte|Taxi
+53|GASTO|486000.00|2026-09-07|Vivienda|Arriendo
+54|GASTO|324000.00|2026-09-20|Vivienda|Administración
+55|GASTO|90000.00|2026-09-09|Servicios|Energía y agua
+56|GASTO|60000.00|2026-09-22|Servicios|Internet y celular
+57|GASTO|60000.00|2026-09-11|Entretenimiento|Cine con amigos
+58|GASTO|40000.00|2026-09-24|Entretenimiento|Suscripción de streaming
+59|GASTO|18000.00|2026-09-13|Salud|Consulta médica
+60|GASTO|12000.00|2026-09-26|Salud|Medicamentos
+61|GASTO|72000.00|2026-09-15|Educación|Libros y copias
+62|GASTO|48000.00|2026-09-28|Educación|Curso en línea
+63|INGRESO|3000000.00|2026-10-01|Salario|Pago mensual
+64|INGRESO|350000.00|2026-10-15|Ingreso extra|Trabajo freelance
+65|GASTO|375000.00|2026-10-03|Alimentación|Mercado del mes
+66|GASTO|250000.00|2026-10-16|Alimentación|Domicilios y restaurantes
+67|GASTO|87000.00|2026-10-05|Transporte|Tarjeta de transporte
+68|GASTO|58000.00|2026-10-18|Transporte|Taxi
+69|GASTO|413000.00|2026-10-07|Vivienda|Arriendo
+70|GASTO|276000.00|2026-10-20|Vivienda|Administración
+71|GASTO|77000.00|2026-10-09|Servicios|Energía y agua
+72|GASTO|51000.00|2026-10-22|Servicios|Internet y celular
+73|GASTO|51000.00|2026-10-11|Entretenimiento|Cine con amigos
+74|GASTO|34000.00|2026-10-24|Entretenimiento|Suscripción de streaming
+75|GASTO|16000.00|2026-10-13|Salud|Consulta médica
+76|GASTO|10000.00|2026-10-26|Salud|Medicamentos
+77|GASTO|61000.00|2026-10-15|Educación|Libros y copias
+78|GASTO|41000.00|2026-10-28|Educación|Curso en línea
+79|INGRESO|3000000.00|2026-11-01|Salario|Pago mensual
+80|GASTO|118000.00|2026-11-01|Alimentación|Mercado del mes
+81|GASTO|78000.00|2026-11-02|Alimentación|Domicilios y restaurantes
+82|GASTO|27000.00|2026-11-02|Transporte|Tarjeta de transporte
+83|GASTO|18000.00|2026-11-03|Transporte|Taxi
+84|GASTO|130000.00|2026-11-03|Vivienda|Arriendo
+85|GASTO|86000.00|2026-11-04|Vivienda|Administración
+86|GASTO|24000.00|2026-11-04|Servicios|Energía y agua
+87|GASTO|16000.00|2026-11-05|Servicios|Internet y celular
+88|GASTO|16000.00|2026-11-05|Entretenimiento|Cine con amigos
+89|GASTO|11000.00|2026-11-06|Entretenimiento|Suscripción de streaming
+90|GASTO|5000.00|2026-11-06|Salud|Consulta médica
+91|GASTO|3000.00|2026-11-07|Salud|Medicamentos
+92|GASTO|19000.00|2026-11-07|Educación|Libros y copias
+93|GASTO|13000.00|2026-11-08|Educación|Curso en línea

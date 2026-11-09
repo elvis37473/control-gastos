@@ -185,8 +185,18 @@ public class GestorArchivos {
                 if (total > 0) {
                     double primero = Math.round(total * 0.6 / 1000) * 1000;
                     double segundo = total - primero;
-                    int dia1 = Math.min(3 + c * 2, ultimoDia);
-                    int dia2 = Math.min(16 + c * 2, ultimoDia);
+                    int dia1;
+                    int dia2;
+                    if (esMesActual) {
+                        int cantidadMovimientos = categorias.size() * 2;
+                        dia1 = 1 + (int) Math.round((double) (c * 2) * (ultimoDia - 1)
+                                / (cantidadMovimientos - 1));
+                        dia2 = 1 + (int) Math.round((double) (c * 2 + 1) * (ultimoDia - 1)
+                                / (cantidadMovimientos - 1));
+                    } else {
+                        dia1 = Math.min(3 + c * 2, ultimoDia);
+                        dia2 = Math.min(16 + c * 2, ultimoDia);
+                    }
 
                     if (primero > 0) {
                         lista.add(new Movimiento(id++, Movimiento.GASTO, primero,
