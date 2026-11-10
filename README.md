@@ -10,7 +10,7 @@ Aplicación web para administrar ingresos y gastos, controlar presupuestos mensu
 ## Funcionalidades
 
 - **Movimientos:** registrar, consultar, modificar y eliminar ingresos y gastos; buscar y filtrar por tipo, mes y categoría.
-![alt text](image-.png)
+![alt text](image.png)
 - **Presupuestos:** asignar un presupuesto a cada categoría y mes, consultar el gasto y porcentaje usado, y ver alertas al superar el 80 % y el 100 %.
 ![alt text](image-1.png)
 - **Reportes:** consultar ingresos, gastos, saldo y detalle por categoría; filtrar por mes y categoría; exportar el reporte como archivo `.txt`.
@@ -22,7 +22,7 @@ Aplicación web para administrar ingresos y gastos, controlar presupuestos mensu
 
 ## Tecnologías
 
-- Java 25
+- Java 21 o superior
 - Spring Boot 4.1.2
 - Vaadin 25.3.5 (Flow)
 - Maven
@@ -30,7 +30,7 @@ Aplicación web para administrar ingresos y gastos, controlar presupuestos mensu
 
 ## Requisitos
 
-- JDK 25
+- JDK 21 o superior
 - Maven 3.8 o superior, o usar el wrapper incluido (`mvnw.cmd` en Windows)
 - Conexión a internet para descargar dependencias la primera vez
 
